@@ -2,8 +2,8 @@
 Using JavaScript, css, HTML to make web game. </br> </br> </br>
 
 #### - Schedule
--2017-04-07 Start  
--2017-06-30 Finish 
+- 2017-04-07 Start  
+- 2017-06-30 Finish 
 </br> </br>
 
 #### - Goal
