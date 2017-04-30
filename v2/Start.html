@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> :: Clean the Planet :: </title>
+<style>
+	.slideshow-container{
+		width: 1000px; height:642px;
+		margin: auto;
+		position: relative;
+	}
+	.prev, .next {
+		cursor: pointer;
+		position: absolute;
+		top: 50%;
+		width: auto;
+		padding: 16px;
+		margin-top: -22px;
+		color: black;
+		font-size: 30px;
+		font-weight: bold;
+		transition: 0.6 ease;		
+		border-radius: 0 3px 3px 0;
+	}
+	.next {
+		right: 0;
+	}
+	.fade {
+		-webkit-animation-name: fade;
+		-webkit-animation-duration: 1.3s;
+		animation-name: fade;
+		animation-duration: 1.3s;
+	}
+	.prev: hover, .next: hover{
+		background-color: rgba(0,0,0,0.8);
+	}
+	@-webkit-keyframes fade {
+ 		 from {opacity: .4} 
+ 		 to {opacity: 1}
+	}
+	@keyframes fade{
+		from{opacity: .4}
+		to{opacity: 1}
+	}
+	.startBtn {
+		background-color: yellow;
+		text-align: center;
+		font-size: 50px;
+	}
+</style>
+</head>
+<body>
+	<audio src="../music/Shoulder_Closures.mp3" autoplay loop> </audio>
+	<div class="slideshow-container">
+		<div class="Slides fade">
+			<img src="../menu/StartImg.jpg">
+		</div>
+
+		<div class="Slides fade">
+			<img src="../menu/StoryImg.jpg">
+		</div>
+
+		<div class="Slides fade">
+			<a href = "Menu.html"> <img src="../menu/ControlImg.jpg"> </a>
+		</div>
+	</div>
+
+	<a class="prev" onclick="plusSlides(-1)"> &#10094; </a>
+	<a class="next" onclick="plusSlides(1)"> &#10095; </a>
+
+	<div style="text-align:center">
+  		<span class="dot" onclick="currentSlide(1)"></span> 
+  		<span class="dot" onclick="currentSlide(2)"></span> 
+  		<span class="dot" onclick="currentSlide(3)"></span> 
+	</div>
+
+
+	<script>
+			var slideIndex = 1;
+			showSlides(slideIndex);
+
+			function plusSlides(n) {
+				showSlides(slideIndex += n);
+			}
+
+			function currentSlide(n) {
+				showSlides(slideIndex = n);
+			}
+
+			function showSlides(n) {
+				var i;
+				var slides = document.getElementsByClassName("Slides");
+				if (n > slides.length) { slideIndex = 3 }
+				if (n < 1) { slideIndex =  1}
+				for (i = 0; i < slides.length; i++) {
+					slides[i].style.display = "none";
+				}
+				slides[slideIndex-1].style.display = "block";
+			}
+	</script>
+</body>
+</html>

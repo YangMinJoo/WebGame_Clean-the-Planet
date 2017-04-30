@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> :: Clean the Planet :: </title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+	.background {
+		width: 1000px; height:642px;
+		background: url(../menu/MenuImg_no_planet.jpg);
+		cursor: url(../menu/spaceship_small.png), auto;
+	    margin: auto;
+	}
+	.earthPosition {
+		position: absolute; 
+		left: 918px; top: 68px; 
+	}
+	.venusPosition {
+		position: absolute;
+		left: 688px; top: 258px;
+	}
+	.mercuryPosition{
+		position: absolute;
+		left: 468px; top: 419px;
+	}
+	#btn {
+		cursor: url(../menu/spaceship_small.png), auto;
+		background: transparent;
+		border: 0;
+	}
+
+</style>
+
+</head>
+
+<body>
+<audio src="../music/The_Woods.mp3" autoplay loop> </audio>
+<div class= "background">
+	<div class = "earthPosition"> 
+		<button type="image" id="btn" onclick="location.href='Mercury_game.html';">
+			<img src= "../planet/earth.png"/> 
+		</button>  
+	</div>
+
+	<div class="venusPosition">
+		<button type="image" id="btn" onclick="location.href='Mercury_game.html';">
+			<img src= "../planet/venus.png"/>
+		</button>
+	</div>
+
+	<div class= "mercuryPosition">
+		<button type="image" id="btn" onclick="location.href='Mercury_game.html';">
+			<img src= "../planet/mercury.png"/>
+		</button>
+	</div>
+</div>
+<p id="demo"> Move your spaceship </p>
+
+</body>
+</html>
