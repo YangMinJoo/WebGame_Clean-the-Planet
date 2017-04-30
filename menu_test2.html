@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> :: Clean the Planet :: </title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+	canvas {
+	    border: 1px solid #d3d3d3;
+	    background: url(../menu/MenuImg_no_planet.jpg);
+
+	    cursor: url(../menu/spaceship_small.png), auto;
+
+	    /* game move to ceneter */
+	    padding-left: 0;  padding-right: 0;
+	    margin-left: auto; margin-right: auto;
+	    display: block;
+	    width: 1000px;
+	}
+</style>
+</head>
+
+<body onload= "startGame()">
+
+<button onclick="location.href='Start.html'"> Home </button>
+
+<script>
+
+var Earth;
+var Mercury;
+var Venus;
+
+function startGame() {
+    Earth = new component(152, 183, '../planet/earth.png', 800, 75);
+    Mercury = new component(122,151, '../planet/mercury.png', 300, 400);
+    Venus = new component(152, 183, '../planet/venus.png', 520, 240);
+    GameArea.start();	
+}
+
+var GameArea = {
+    canvas : document.createElement("canvas"),
+    start : function() {
+        this.canvas.width = 1000;
+        this.canvas.height = 642;
+        this.context = this.canvas.getContext("2d");
+        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        
+        //특정시간마다 특정 함수 또는 코드를 실행시킬 때 사용, 
+        //updateGameArea함수를 20ms에 한번씩 실행함.
+        this.interval = setInterval(updateGameArea, 20);
+
+    },
+
+    clear : function() {
+    	this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+}
+
+//make game pieces
+function component(width, height, color, x, y) {
+	this.type = "image";
+    this.image = new Image();
+    this.image.src = color;
+
+	this.width = width;   this.height = height;
+	this.x = x;	 		  this.y = y;
+
+	this.update = function() {
+		ctx = GameArea.context;
+		ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+	}
+}
+
+function updateGameArea() {
+	GameArea.clear();
+	Earth.update();
+	Mercury.update();
+	Venus.update();
+}
+
+</script>
+
+
+<p id="demo"> Move your spaceship </p>
+
+</body>
+</html>
