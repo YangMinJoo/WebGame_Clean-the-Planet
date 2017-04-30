@@ -19,5 +19,5 @@ Using JavaScript, css, HTML to make web game. </br> </br> </br>
 ### - Reference
 - google doodles games
 - w3school
-- javacsript books
+- javaScript books
 </br> </br>
