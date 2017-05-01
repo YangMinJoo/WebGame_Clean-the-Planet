@@ -4,29 +4,31 @@
 <title> :: Clean the Planet :: Mecury</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <style>
-canvas {
-    border: 1px solid #d3d3d3;
-    background: url(../menu/MenuImg_no_planet.jpg);
+    * { cursor: none; } //cursor hidden!
 
-    cursor: url(../menu/spaceship_small.png), auto;
+    canvas {
+        border: 1px solid #d3d3d3;
+        background: url(../menu/mercury_background.jpg);
 
-    /* game move to center */
-    padding-left: 0;  padding-right: 0;
-    margin-left: auto; margin-right: auto;
-    display: block;
-    width: 1000px;
-}
+        /* game move to center */
+        padding-left: 0;  padding-right: 0;
+        margin-left: auto; margin-right: auto;
+        display: block;
+    }
 </style>
 </head>
 
-<body onload="startGame()">
+
+<body onload="startGame()" style="overflow: hidden"> /* scrollbar hidden! */
 <script>
 
-var Earth;
+var cleaner;
+var background;
 
 function startGame() {
-	//spaceship = new component(85, 85, "spaceship.png", 100, 200);
-	GameArea.start();
+    cleaner = new component(90, 100, '../piece/cleaner.png', 80, 500, "image");
+    background = new component(2000, 642, '../menu/mercury_background_long.jpg', 0, 0, "background");
+    GameArea.start();
 }
 
 var GameArea = {
@@ -36,8 +38,71 @@ var GameArea = {
         this.canvas.height = 642;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+
+         //특정시간마다 특정 함수 또는 코드를 실행시킬 때 사용, 
+        //updateGameArea함수를 20ms에 한번씩 실행함.
+        this.interval = setInterval(updateGameArea, 20);
+
+        window.addEventListener('keydown', function (e) { GameArea.key = e.keyCode; })
+        window.addEventListener('keyup', function (e) { GameArea.key = false; })
+
+        },
+
+    clear : function() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 }
+
+function component(width, height, src, x, y, type) {
+    this.type = type;
+    this.image = new Image();
+    this.image.src = src;
+
+    this.width = width;   this.height = height;
+    this.x = x;           this.y = y;
+
+    this.speedX = 0;      this.speedY = 0;
+
+    this.update = function() {
+        ctx = GameArea.context;
+        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+
+        if(type == "background") {
+            ctx.drawImage(this.image, this.x + this.width, this.y, this.width, this.height);
+        }
+    }
+
+    this.newPos = function() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        //background loop
+        if(type == "background") {
+            if (this.x == -(this.width)) {  this.x = 0;  }
+        }
+    }
+}
+
+function updateGameArea() {
+    GameArea.clear();
+    
+    background.speedX = -0.2;
+    background.newPos();    
+    background.update();
+
+    // 이 좌표를 위쪽으로 옮기니 에러가 해결되고 실행되었음.
+    cleaner.speedX = 0;
+    cleaner.speedY = 0;
+
+    if (GameArea.key && GameArea.key == 37) {cleaner.speedX = -3; }
+    if (GameArea.key && GameArea.key == 39) {cleaner.speedX = 3; }
+    if (GameArea.key && GameArea.key == 38) {cleaner.speedY = -3; }
+    if (GameArea.key && GameArea.key == 40) {cleaner.speedY = 3; }
+
+    cleaner.newPos();
+    cleaner.update();
+}
 </script>
+
 </body>
 </html>
