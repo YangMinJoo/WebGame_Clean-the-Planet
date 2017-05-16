@@ -4,7 +4,7 @@
 <title> :: Clean the Planet :: Mecury</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <style>
-    * { cursor: none; } //cursor hidden!
+    * { cursor: none; }  /* cursor hidden! */
 
     canvas {
         border: 1px solid #d3d3d3;
@@ -12,22 +12,36 @@
 
         /* game move to center */
         padding-left: 0;  padding-right: 0;
-        margin-left: auto; margin-right: auto;
-        display: block;
+        margin : 0 auto;  width: 1000px; height: 642px;
+        display: block;   position: relative;
+    }
+
+    .lifeBar{
+        text-align: center;
+
     }
 </style>
 </head>
 
 
-<body onload="startGame()" style="overflow: hidden"> /* scrollbar hidden! */
+<body onload="startGame()" style="overflow: hidden" >
 <script>
-
 var cleaner;
 var background;
+var trash;
+var trash2;
+var trash3;
+var trash4;
+var trashObstacles = [];
+
 
 function startGame() {
     cleaner = new component(90, 100, '../piece/cleaner.png', 80, 500, "image");
     background = new component(2000, 642, '../menu/mercury_background_long.jpg', 0, 0, "background");
+    trash = new component(40, 40, '../piece/garbage.png', 450, 300, "image");
+    trash2 = new component(40, 40, '../piece/banana.png', 300, 400, "image");
+    trash3 = new component(50, 50, '../piece/robot.png', 600, 100, "image");
+    trash4 = new component(55, 55, '../piece/gas_mask.png', 800, 230, "image");
     GameArea.start();
 }
 
@@ -38,6 +52,7 @@ var GameArea = {
         this.canvas.height = 642;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        this.frameNo = 0;
 
          //특정시간마다 특정 함수 또는 코드를 실행시킬 때 사용, 
         //updateGameArea함수를 20ms에 한번씩 실행함.
@@ -50,8 +65,13 @@ var GameArea = {
 
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    },
+
+    stop : function() {
+        clearInterval(this.interval);
     }
 }
+
 
 function component(width, height, src, x, y, type) {
     this.type = type;
@@ -81,28 +101,86 @@ function component(width, height, src, x, y, type) {
             if (this.x == -(this.width)) {  this.x = 0;  }
         }
     }
+
+    this.crashWith = function(otherobj) {
+        var left = this.x;
+        var right = this.x + (this.width);
+        var top = this.y;
+        var bottom = this.y + (this.height);
+        var otherleft = otherobj.x;
+        var otherright = otherobj.x + (otherobj.width);
+        var othertop = otherobj.y;
+        var otherbottom = otherobj.y + (otherobj.height);
+        var crash = true;
+        if ((bottom < othertop) || (top > otherbottom) || (right < otherleft) || (left > otherright)) {
+            crash = false;
+        }
+        return crash;
+    }
 }
 
 function updateGameArea() {
-    GameArea.clear();
-    
-    background.speedX = -0.2;
-    background.newPos();    
-    background.update();
+    console.log("-----------------------------");
 
-    // 이 좌표를 위쪽으로 옮기니 에러가 해결되고 실행되었음.
-    cleaner.speedX = 0;
-    cleaner.speedY = 0;
+    if (cleaner.crashWith(trash) || cleaner.crashWith(trash2) || cleaner.crashWith(trash3) || cleaner.crashWith(trash4)) {
+            GameArea.stop();
+            console.log("Game Over");
+            alert("Game Over");
+            return;
+    } 
 
-    if (GameArea.key && GameArea.key == 37) {cleaner.speedX = -3; }
-    if (GameArea.key && GameArea.key == 39) {cleaner.speedX = 3; }
-    if (GameArea.key && GameArea.key == 38) {cleaner.speedY = -3; }
-    if (GameArea.key && GameArea.key == 40) {cleaner.speedY = 3; }
+    else {
+        GameArea.clear();
+        console.log("GameArea clear!");
 
-    cleaner.newPos();
-    cleaner.update();
+        background.speedX = -0.1;
+        background.newPos();    
+        background.update();
+
+        console.log("backgound update!");
+
+        // 이 좌표를 위쪽으로 옮기니 에러가 해결되고 실행되었음. 왜그런지 이유 찾아보기
+        cleaner.speedX = 0;
+        cleaner.speedY = 0;
+
+        if (GameArea.key && GameArea.key == 37) {cleaner.speedX = -3; }
+        if (GameArea.key && GameArea.key == 39) {cleaner.speedX = 3; }
+        if (GameArea.key && GameArea.key == 38) {cleaner.speedY = -3; }
+        if (GameArea.key && GameArea.key == 40) {cleaner.speedY = 3; }
+
+        cleaner.newPos();
+        cleaner.update();
+
+        console.log("cleaner update!");
+
+        trash.speedX = 0;
+        trash.speedY = 0;
+        
+        trash.newPos();
+        trash.update();
+
+        console.log("trash update!");
+
+        trash2.newPos();
+        trash2.update();
+
+        console.log("trash2 update!");
+
+        trash3.newPos();
+        trash3.update();
+
+        console.log("trash3 update!");
+
+        trash4.newPos();
+        trash4.update();
+
+        console.log("trash4 update!");
+    }
 }
+
 </script>
+
+<div class="lifeBar"> <h4> Here is Life Bar </h4> </div>
 
 </body>
 </html>
