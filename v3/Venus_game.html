@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Clean the Planet_Mecury</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+    /* * { cursor: none; } */
+
+    canvas {
+        border: 1px solid #d3d3d3;
+        background: url(../piece/background.png);
+
+        /* game move to center */
+        padding-left: 0;  padding-right: 0;
+        margin : 0 auto;  width: 1000px; height: 642px;
+        display: block;   position: relative;
+    }
+    #wrapper {
+  		width: 1000px;
+      background-color: black;
+      border: 1px solid #d3d3d3;
+  		margin:0 auto;
+  	}
+
+    .a {
+  		margin:10px;
+  	}
+</style>
+</head>
+
+
+<body onload="startGame()">
+
+<div id="wrapper">
+  <a href="Menu.html"> <img src="../piece/homeBtn.png" width="70px" height="70px"/> </a>
+  <a href="Earth_game.html"> <img src="../piece/nextBtn.png" width="70px" height="70px"/> </a>
+  <a href="Venus_game.html"> <img src="../piece/retryBtn.png" width="70px" height="70px"/> </a>
+</div>
+<script>
+// <audio src="../music/Tobu_Candyland.mp3" autoplay loop> </audio>
+var cleaner;
+var background;
+var trash = new Array();
+var ground;
+var score;
+var remainTrash;
+var remainTrashNum = 0;
+var totalScore = 0;
+var eatTrashNum = 0;
+var finish;
+var boostBar;
+var time = 0;
+var maxTrash = 100;
+var imgSrc = new Array(
+  '../piece/garbage.png',
+  '../piece/banana.png',
+  '../piece/robot.png',
+  '../piece/gas_mask.png'
+);
+var boostGuage = 1;
+
+var eatTrashSound = new Audio('../music/Metal_Parts_Cling.mp3');
+var backgroundSound = new Audio('../music/Tobu_Candyland.mp3');
+var gameOverSound = new Audio('../music/Wooden_Bat_Hits_Baseball_Run.mp3');
+backgroundSound.play();
+
+var Random = {
+  Xposition: function() {
+    var min= 300;
+    var max = 980;
+    return Math.floor(Math.random() * (max) + min);  // 300 ~ 980
+  },
+  Yposition: function() {
+    var min= 50;
+    var max = 500;
+    return Math.floor(Math.random() * (max) + min);  // 80 ~ 500
+  },
+  TrashImgSrc: function() {
+    return imgSrc[Math.floor(Math.random() * (imgSrc.length))];
+  }
+};
+
+function startGame() {
+    cleaner = new component(90, 100, '../piece/cleaner.png', 80, 400, "image");
+    background = new component(2000, 642, '../piece/background_venus.png', 0, 0, "image");
+    ground = new component(1000, 100, '../piece/ground.png', 0, 600, "image");
+    boostBar = new component(800, 20, '../piece/boost1.png', 100, 590, "image");
+    score = new component("40px", "Consolas", "white", 20, 40, "text");
+    remainTrash = new component("25px", "Consolas", "gray", 700, 30, "text");
+    finish = new component(400, 400, '../piece/gameClear.jpg', 300, 100, "image");
+    trash.push(new component(40, 40, Random.TrashImgSrc(), Random.Xposition(), Random.Yposition(), "image"));
+    trash.push(new component(40, 40, Random.TrashImgSrc(), Random.Xposition(), Random.Yposition(), "image"));
+    remainTrashNum = trash.length;
+    eatTrashNum = trash.length + 1;
+    GameArea.start();
+}
+
+var GameArea = {
+    canvas : document.createElement("canvas"),
+    start : function() {
+        this.canvas.width = 1000;
+        this.canvas.height = 642; //642
+        this.context = this.canvas.getContext("2d");
+        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        this.frameNo = 0;
+         //특정시간마다 특정 함수 또는 코드를 실행시킬 때 사용,
+        //updateGameArea함수를 20ms에 한번씩 실행함.
+        this.interval = setInterval(updateGameArea, 20);
+        window.addEventListener('keydown', function (e) { GameArea.key = e.keyCode; })
+        window.addEventListener('keyup', function (e) { GameArea.key = false; })
+        },
+
+    clear : function() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    },
+
+    stop : function() {
+        clearInterval(this.interval);
+    }
+};
+
+function component(width, height, src, x, y, type) {
+  this.type = type;
+  if(this.type == "image") {
+    this.image = new Image();
+    this.image.src = src;
+  }
+
+  this.width = width;   this.height = height;
+  this.x = x;           this.y = y;
+  this.speedX = 0;      this.speedY = 0;
+
+  this.update = function() {
+    ctx = GameArea.context;
+    if(this.type == "text") {
+      ctx.font = this.width + " " + this.height;
+      ctx.fillStyle = src;
+      ctx.fillText(this.text, this.x, this.y);
+    }
+    else {
+      ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+    }
+  }
+
+  this.newPos = function() {
+  this.x += this.speedX;
+  this.y += this.speedY;
+}
+
+  this.crashWith = function(otherobj) {
+    var left = this.x;
+    var right = this.x + (this.width);
+    var top = this.y;
+    var bottom = this.y + (this.height);
+    var otherleft = otherobj.x;
+    var otherright = otherobj.x + (otherobj.width);
+    var othertop = otherobj.y;
+    var otherbottom = otherobj.y + (otherobj.height);
+    var crash = true;
+
+    if ((bottom < othertop) || (top > otherbottom) || (right < otherleft) || (left > otherright)) {
+      crash = false;
+    }
+    return crash;
+  }
+}
+
+function KeyCheck() {
+  if (GameArea.key && GameArea.key == 37 && cleaner.x > 0) {cleaner.speedX = -5; background.speedX = -0.3;} //left
+  if (GameArea.key && GameArea.key == 39 && cleaner.x < 910) {cleaner.speedX = 5; background.speedX = 0.3;} //right
+  if (GameArea.key && GameArea.key == 38 && cleaner.y > 0) {cleaner.speedY = -5; } //up
+  if (GameArea.key && GameArea.key == 40 && cleaner.y < 500) {cleaner.speedY = 5; } //down
+  if (GameArea.key && GameArea.key == 32) { cleaner.image.src = "../piece/cleaner_spacebar.png"; cleaner.width = 180; } //down
+  if (GameArea.key && GameArea.key == 88) { boostGuage = 1; boostBar.image.src = '../piece/boost'+ boostGuage +'.png'; }
+}
+
+function CheckCrash() {
+  eatTrashNum = trash.length + 1;
+  for(var i=0; i < trash.length; i++) {
+    if(cleaner.crashWith(trash[i]) && cleaner.width == 180 && boostGuage < 6) { eatTrashNum = i; return true; }
+    //cleaner가 trash랑 부딪혔는데 스페이스바를 누른 상태일 경우!
+  }
+}
+
+function EndOfTrash() {
+  var check = 0;
+  for(var i=0; i < trash.length; i++) {
+    if(trash[i].x < -40) { check++; }
+  }
+  if(check == trash.length) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+function updateGameArea() {
+  time++;
+
+  if(time == 20 && trash.length < maxTrash) { //50개 셌을때마다, 최대 쓰레기와 겹치지 않는 경우 실행
+    time = 0;
+    trash.push(new component(40, 40, Random.TrashImgSrc(), Random.Xposition(), Random.Yposition(), "image"));
+    remainTrashNum++;
+  }
+
+  if(CheckCrash()) { //trash 번호를 반환할 경우
+    remainTrashNum--;
+    if(boostGuage < 6){
+      totalScore += 100;
+      boostGuage++;
+      boostBar.image.src = '../piece/boost'+ boostGuage +'.png';
+    }
+    eatTrashSound.play();
+    trash[eatTrashNum].x = -50;
+  }
+  GameArea.clear();
+
+  if(boostGuage == 6) {
+    cleaner.image.src = '../piece/cleaner_full.png';
+  }
+  else {
+    cleaner.image.src = "../piece/cleaner.png";
+  }
+  cleaner.width = 90;
+
+  cleaner.speedX = 0;
+  cleaner.speedY = 0;
+
+  background.speedX = 0;
+  background.speedY = 0;
+
+  KeyCheck();
+
+  background.newPos();
+  background.update();
+
+  cleaner.newPos();
+  cleaner.update();
+
+  ground.update();
+
+  boostBar.update();
+
+  for (var i = 0; i < trash.length; i += 1) {
+    trash[i].x += -3;
+    trash[i].update();
+  }
+
+  score.text="MOENY: " + totalScore + "$";
+  score.update();
+
+  remainTrash.text="남은쓰레기: " + remainTrashNum + " / " + maxTrash;
+  remainTrash.update();
+
+  if (totalScore == (maxTrash * 100)) {
+    finish.update();
+    backgroundSound.pasue();
+    GameArea.stop;
+    return;
+  }
+  else if (EndOfTrash() && (totalScore < (trash.length * 100))){
+    finish.image.src = '../piece/gameOver.png';
+    finish.update();
+    backgroundSound.pause();
+    //GameArea.drawImage('../piece/gameOver.png', 400, 400);
+    GameArea.Stop;
+    return;
+  }
+
+}
+</script>
+</body>
+</html>
