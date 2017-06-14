@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
-<title> :: Clean the Planet :: Mecury</title>
+<title>Clean the Planet_Mecury</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <style>
     * { cursor: none; }  /* cursor hidden! */
 
     canvas {
         border: 1px solid #d3d3d3;
-        background: url(../menu/mercury_background.jpg);
+        background: url(../piece/background.png);
 
         /* game move to center */
         padding-left: 0;  padding-right: 0;
@@ -18,7 +18,6 @@
 
     .lifeBar{
         text-align: center;
-
     }
 </style>
 </head>
@@ -33,15 +32,19 @@ var trash2;
 var trash3;
 var trash4;
 var trashObstacles = [];
-
+var trashSpeed = 2;
+var trashSpeed2 = 3;
+var trashSpeed4 = 4;
+var ground;
 
 function startGame() {
-    cleaner = new component(90, 100, '../piece/cleaner.png', 80, 500, "image");
-    background = new component(2000, 642, '../menu/mercury_background_long.jpg', 0, 0, "background");
+    cleaner = new component(90, 100, '../piece/cleaner.png', 80, 400, "image");
+    background = new component(2000, 642, '../piece/background.png', 0, 0, "background");
     trash = new component(40, 40, '../piece/garbage.png', 450, 300, "image");
     trash2 = new component(40, 40, '../piece/banana.png', 300, 400, "image");
     trash3 = new component(50, 50, '../piece/robot.png', 600, 100, "image");
     trash4 = new component(55, 55, '../piece/gas_mask.png', 800, 230, "image");
+    ground = new component(1000, 100, '../piece/ground.png', 0, 600, "image");
     GameArea.start();
 }
 
@@ -49,12 +52,12 @@ var GameArea = {
     canvas : document.createElement("canvas"),
     start : function() {
         this.canvas.width = 1000;
-        this.canvas.height = 642;
+        this.canvas.height = 642; //642
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.frameNo = 0;
 
-         //특정시간마다 특정 함수 또는 코드를 실행시킬 때 사용, 
+         //특정시간마다 특정 함수 또는 코드를 실행시킬 때 사용,
         //updateGameArea함수를 20ms에 한번씩 실행함.
         this.interval = setInterval(updateGameArea, 20);
 
@@ -87,9 +90,9 @@ function component(width, height, src, x, y, type) {
         ctx = GameArea.context;
         ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
 
-        if(type == "background") {
+        /*if(type == "background") {
             ctx.drawImage(this.image, this.x + this.width, this.y, this.width, this.height);
-        }
+        }*/
     }
 
     this.newPos = function() {
@@ -97,9 +100,25 @@ function component(width, height, src, x, y, type) {
         this.y += this.speedY;
 
         //background loop
+        // 만약에 width의 값이 -일경우, x position을 0으로 둠으로써 계속 반복.
         if(type == "background") {
             if (this.x == -(this.width)) {  this.x = 0;  }
         }
+
+      	if(width==40 && height==40) { //trash1
+      		if(this.x == 550) { trashSpeed = -2; }
+      		if(this.x == 456) { trashSpeed = +2; }
+      	}
+
+      	if(width==50 && height==50) { //trash3
+      		if(this.y == 400) { trashSpeed2 = -4; }
+      		if(this.y == 100) { trashSpeed2 = +4; }
+      	}
+
+      	if(width==55 && height==55) { //trash4
+      		if(this.x == 900) { trashSpeed4 = -4; }
+      		if(this.x == 800) { trashSpeed4 = +4; }
+      	}
     }
 
     this.crashWith = function(otherobj) {
@@ -112,6 +131,7 @@ function component(width, height, src, x, y, type) {
         var othertop = otherobj.y;
         var otherbottom = otherobj.y + (otherobj.height);
         var crash = true;
+
         if ((bottom < othertop) || (top > otherbottom) || (right < otherleft) || (left > otherright)) {
             crash = false;
         }
@@ -122,56 +142,65 @@ function component(width, height, src, x, y, type) {
 function updateGameArea() {
     console.log("-----------------------------");
 
-    if (cleaner.crashWith(trash) || cleaner.crashWith(trash2) || cleaner.crashWith(trash3) || cleaner.crashWith(trash4)) {
-            GameArea.stop();
-            console.log("Game Over");
-            alert("Game Over");
-            return;
-    } 
-
+    if (cleaner.crashWith(trash) || cleaner.crashWith(trash2) || cleaner.crashWith(trash3) || cleaner.crashWith(trash4) ) {
+        GameArea.stop();
+        console.log("Game Over");
+        alert("Game Over");
+        return;
+    }
     else {
         GameArea.clear();
         console.log("GameArea clear!");
 
-        background.speedX = -0.1;
-        background.newPos();    
-        background.update();
+        //background.speedX = -1;
+        //background.newPos();
+        //background.update();
 
-        console.log("backgound update!");
+        //ground.update();
 
         // 이 좌표를 위쪽으로 옮기니 에러가 해결되고 실행되었음. 왜그런지 이유 찾아보기
         cleaner.speedX = 0;
         cleaner.speedY = 0;
 
-        if (GameArea.key && GameArea.key == 37) {cleaner.speedX = -3; }
-        if (GameArea.key && GameArea.key == 39) {cleaner.speedX = 3; }
-        if (GameArea.key && GameArea.key == 38) {cleaner.speedY = -3; }
-        if (GameArea.key && GameArea.key == 40) {cleaner.speedY = 3; }
+        background.speedX = 0;
+        background.speedY = 0;
+
+        if (GameArea.key && GameArea.key == 37) {cleaner.speedX = -5; background.speedX = -5;}
+        if (GameArea.key && GameArea.key == 39) {cleaner.speedX = 5; background.speedX = 5;}
+        if (GameArea.key && GameArea.key == 38) {cleaner.speedY = -5; }
+        if (GameArea.key && GameArea.key == 40) {cleaner.speedY = 5; }
+
+        background.newPos();
+        background.update();
 
         cleaner.newPos();
         cleaner.update();
 
+        ground.update();
+
         console.log("cleaner update!");
 
-        trash.speedX = 0;
-        trash.speedY = 0;
-        
-        trash.newPos();
+        trash.speedX = trashSpeed;
+
+	      trash.newPos();
         trash.update();
 
         console.log("trash update!");
 
-        trash2.newPos();
+      	trash2.speedX = trashSpeed;
+      	trash2.newPos();
         trash2.update();
 
         console.log("trash2 update!");
 
-        trash3.newPos();
+      	trash3.speedY = trashSpeed2;
+      	trash3.newPos();
         trash3.update();
 
         console.log("trash3 update!");
 
-        trash4.newPos();
+      	trash4.speedX = trashSpeed4;
+      	trash4.newPos();
         trash4.update();
 
         console.log("trash4 update!");

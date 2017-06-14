@@ -2,6 +2,7 @@
 <html>
 <head>
 <title> :: Clean the Planet :: </title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <style>
 	.slideshow-container{
 		width: 1000px; height:642px;
@@ -11,7 +12,7 @@
 	.prev, .next {
 		cursor: pointer;
 		position: absolute;
-		top: 50%;
+		top: 40%;
 		width: auto;
 		padding: 16px;
 		margin-top: -22px;
@@ -24,19 +25,24 @@
 	.next {
 		right: 0;
 	}
+
 	.fade {
 		-webkit-animation-name: fade;
-		-webkit-animation-duration: 1.3s;
+		-webkit-animation-duration: 0.7s;
 		animation-name: fade;
-		animation-duration: 1.3s;
+		animation-duration: 0.7s;
 	}
 	.prev: hover, .next: hover{
 		background-color: rgba(0,0,0,0.8);
 	}
+
+	console.log("effect");
+
 	@-webkit-keyframes fade {
  		 from {opacity: .4} 
  		 to {opacity: 1}
 	}
+
 	@keyframes fade{
 		from{opacity: .4}
 		to{opacity: 1}
@@ -64,8 +70,8 @@
 		</div>
 	</div>
 
-	<a class="prev" onclick="plusSlides(-1)"> &#10094; </a>
-	<a class="next" onclick="plusSlides(1)"> &#10095; </a>
+	<a class="prev" onclick="plusSlides(-1)"> &#10153; </a>
+	<a class="next" onclick="plusSlides(1)"> &#10153; </a>
 
 	<div style="text-align:center">
   		<span class="dot" onclick="currentSlide(1)"></span> 
