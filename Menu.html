@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> :: Clean the Planet :: </title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+	.background {
+		width: 1000px; height:642px;
+		background: url(http://game.cherrypie.co.kr/menu/MenuImg_no_planet.jpg);
+		cursor: url(http://game.cherrypie.co.kr/menu/spaceship_small.png), auto;
+	    margin: auto;
+	}
+	.earthPosition {
+		position: absolute;
+		left: 918px; top: 68px;
+	}
+	.venusPosition {
+		position: absolute;
+		left: 688px; top: 258px;
+	}
+	.mercuryPosition{
+		position: absolute;
+		left: 468px; top: 419px;
+	}
+	#btn {
+		cursor: url(http://game.cherrypie.co.kr/menu/spaceship_small.png), auto;
+		background: transparent;
+		border: 0;
+	}
+	.demo {
+		text-align: center;
+	}
+
+</style>
+
+</head>
+
+<body>
+<audio src="http://game.cherrypie.co.kr/music/The_Woods.mp3" autoplay loop> </audio>
+	<div class= "background">
+		<a href="http://game.cherrypie.co.kr/Start.html" id="prev"> <img src="http://game.cherrypie.co.kr/piece/homeBtn.png" width="70px" height="70px"/> </a>
+		<div class = "earthPosition">
+			<button type="image" id="btn" onclick="location.href='help.html';">
+				<img src= "http://game.cherrypie.co.kr/planet/earth.png"/>
+			</button>
+	</div>
+
+	<div class="venusPosition">
+		<button type="image" id="btn" onclick="location.href='help.html';">
+			<img src= "http://game.cherrypie.co.kr/planet/venus.png"/>
+		</button>
+	</div>
+
+	<div class= "mercuryPosition">
+		<button type="image" id="btn" onclick="location.href='help.html';">
+			<img src= "http://game.cherrypie.co.kr/planet/mercury.png"/>
+		</button>
+	</div>
+</div>
+<p class="demo"> Move your spaceship </p>
+
+</body>
+</html>

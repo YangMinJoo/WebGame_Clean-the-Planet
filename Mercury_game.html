@@ -8,7 +8,7 @@
 
     canvas {
         border: 1px solid #d3d3d3;
-        background: url(game.cherrypie.co.kr/piece/background.png);
+        background: url(http://game.cherrypie.co.kr/piece/background.png);
 
         /* game move to center */
         padding-left: 0;  padding-right: 0;
@@ -31,9 +31,9 @@
 
 <body onload="startGame()">
 <div id="wrapper">
-  <a href="Menu.html"> <img src="game.cherrypie.co.kr/piece/homeBtn.png" width="70px" height="70px"/> </a>
-  <a href="Venus_game.html"> <img src="game.cherrypie.co.kr/piece/nextBtn.png" width="70px" height="70px"/> </a>
-  <a href="Mercury_game.html"> <img src="game.cherrypie.co.kr/piece/retryBtn.png" width="70px" height="70px"/> </a>
+  <a href="http://game.cherrypie.co.kr/Menu.html"> <img src="http://game.cherrypie.co.kr/piece/homeBtn.png" width="70px" height="70px"/> </a>
+  <a href="http://game.cherrypie.co.kr/Venus_game.html"> <img src="http://game.cherrypie.co.kr/piece/nextBtn.png" width="70px" height="70px"/> </a>
+  <a href="http://game.cherrypie.co.kr/Mercury_game.html"> <img src="http://game.cherrypie.co.kr/piece/retryBtn.png" width="70px" height="70px"/> </a>
 </div>
 <script>
 var cleaner;
@@ -50,16 +50,16 @@ var boostBar;
 var time = 0;
 var maxTrash = 6;
 var imgSrc = new Array(
-  'game.cherrypie.co.kr/piece/garbage.png',
-  'game.cherrypie.co.kr/piece/banana.png',
-  'game.cherrypie.co.kr/piece/robot.png',
-  'game.cherrypie.co.kr/piece/gas_mask.png'
+  'http://game.cherrypie.co.kr/piece/garbage.png',
+  'http://game.cherrypie.co.kr/piece/banana.png',
+  'http://game.cherrypie.co.kr/piece/robot.png',
+  'http://game.cherrypie.co.kr/piece/gas_mask.png'
 );
 var boostGuage = 1;
 
-var eatTrashSound = new Audio('game.cherrypie.co.kr/music/Metal_Parts_Cling.mp3');
-var backgroundSound = new Audio('game.cherrypie.co.kr/music/Tobu_Candyland.mp3');
-var gameOverSound = new Audio('game.cherrypie.co.kr/music/Wooden_Bat_Hits_Baseball_Run.mp3');
+var eatTrashSound = new Audio('http://game.cherrypie.co.kr/music/Metal_Parts_Cling.mp3');
+var backgroundSound = new Audio('http://game.cherrypie.co.kr/music/Tobu_Candyland.mp3');
+var gameOverSound = new Audio('http://game.cherrypie.co.kr/music/Wooden_Bat_Hits_Baseball_Run.mp3');
 backgroundSound.play();
 
 var Random = {
@@ -79,13 +79,13 @@ var Random = {
 };
 
 function startGame() {
-    cleaner = new component(90, 100, 'game.cherrypie.co.kr/piece/cleaner.png', 80, 400, "image");
-    background = new component(2000, 642, 'game.cherrypie.co.kr/piece/background.png', 0, 0, "image");
-    ground = new component(1000, 100, 'game.cherrypie.co.kr/piece/ground.png', 0, 600, "image");
-    boostBar = new component(800, 20, 'game.cherrypie.co.kr/piece/boost1.png', 100, 590, "image");
+    cleaner = new component(90, 100, 'http://game.cherrypie.co.kr/piece/cleaner.png', 80, 400, "image");
+    background = new component(2000, 642, 'http://game.cherrypie.co.kr/piece/background.png', 0, 0, "image");
+    ground = new component(1000, 100, 'http://game.cherrypie.co.kr/piece/ground.png', 0, 600, "image");
+    boostBar = new component(800, 20, 'http://game.cherrypie.co.kr/piece/boost1.png', 100, 590, "image");
     score = new component("40px", "Consolas", "white", 20, 40, "text");
     remainTrash = new component("25px", "Consolas", "gray", 740, 30, "text");
-    finish = new component(400, 400, 'game.cherrypie.co.kr/piece/gameClear.jpg', 300, 100, "image");
+    finish = new component(400, 400, 'http://game.cherrypie.co.kr/piece/gameClear.jpg', 300, 100, "image");
     trash.push(new component(40, 40, Random.TrashImgSrc(), Random.Xposition(), Random.Yposition(), "image"));
     trash.push(new component(40, 40, Random.TrashImgSrc(), Random.Xposition(), Random.Yposition(), "image"));
     remainTrashNum = trash.length;
@@ -172,14 +172,14 @@ function KeyCheck() { //방향키 체ㅋ해서 cleaner속도 움직임. 맨 마�
   if (GameArea.key && GameArea.key == 40 && cleaner.y < 500) {cleaner.speedY = 5; } //down
   if (GameArea.key && GameArea.key == 32) { //spacebar
     if(boostGuage == 6) {
-      cleaner.image.src = 'game.cherrypie.co.kr/piece/cleaner_full_spacebar.png';
+      cleaner.image.src = 'http://game.cherrypie.co.kr/piece/cleaner_full_spacebar.png';
     }
     else {
-      cleaner.image.src = "game.cherrypie.co.kr/piece/cleaner_spacebar.png";
+      cleaner.image.src = "http://game.cherrypie.co.kr/piece/cleaner_spacebar.png";
     }
     cleaner.width = 180;
   } //down
-  if (GameArea.key && GameArea.key == 88) { boostGuage = 1; boostBar.image.src = 'game.cherrypie.co.kr/piece/boost'+ boostGuage +'.png';}
+  if (GameArea.key && GameArea.key == 88) { boostGuage = 1; boostBar.image.src = 'http://game.cherrypie.co.kr/piece/boost'+ boostGuage +'.png';}
 }
 
 function CheckCrash() {
@@ -217,7 +217,7 @@ function updateGameArea() {
     if(boostGuage < 6){ //부스트게이지 증가.
       totalScore += 100;
       boostGuage++;
-      boostBar.image.src = 'game.cherrypie.co.kr/piece/boost'+ boostGuage +'.png';
+      boostBar.image.src = 'http://game.cherrypie.co.kr/piece/boost'+ boostGuage +'.png';
     }
     eatTrashSound.play();
     trash[eatTrashNum].x = -50;
@@ -226,10 +226,10 @@ function updateGameArea() {
   GameArea.clear();
 
   if(boostGuage == 6) {
-    cleaner.image.src = 'game.cherrypie.co.kr/piece/cleaner_full.png';
+    cleaner.image.src = 'http://game.cherrypie.co.kr/piece/cleaner_full.png';
   }
   else {
-    cleaner.image.src = "game.cherrypie.co.kr/piece/cleaner.png";
+    cleaner.image.src = "http://game.cherrypie.co.kr/piece/cleaner.png";
   }
 
   cleaner.width = 90;
@@ -271,7 +271,7 @@ function updateGameArea() {
     return;
   }
   else if (EndOfTrash() && (totalScore < (trash.length * 100))){
-    finish.image.src = 'game.cherrypie.co.kr/piece/gameOver.png';
+    finish.image.src = 'http://game.cherrypie.co.kr/piece/gameOver.png';
     finish.update();
     backgroundSound.pause();
     GameArea.Stop;
